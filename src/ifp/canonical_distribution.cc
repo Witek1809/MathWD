@@ -1,5 +1,4 @@
-
-#include <ecm.h>
+#include "ecm/ecm.h"
 #include <sstream>
 #include <NTL/RR.h>
 #include <algorithm>

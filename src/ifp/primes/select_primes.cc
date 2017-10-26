@@ -19,13 +19,16 @@ NTL::ZZ RandomZZModN(const NTL::ZZ &n)
 std::set<NTL::ZZ> SelectPrimeNumbers(const NTL::ZZ &B)
 {
     std::set<NTL::ZZ> primes;
+
     #pragma omp parallel shared(B,primes)
     {
         NTL::ZZ stop  = B; // domyslny koniec obszaru poszukiwań //////////////////////////////////
         NTL::ZZ start = NTL::ZZ(2); // domyślny początek obszaru poszukiwań ///////////////////////
         std::set<NTL::ZZ> primes_thread; // lista liczb pierwszych zebrana przez wątek ////////////
         NTL::ZZ chunk_size = B/NTL::conv<NTL::ZZ>(omp_get_num_threads()); //rozmiar obszaru ///////
+
         start = start + NTL::conv<NTL::ZZ>(omp_get_thread_num())*chunk_size; // początek obszaru //
+
         if(omp_get_thread_num() != omp_get_num_threads()-1){ //////////////////////////////////////
             stop = start + chunk_size; // określam koniec obszaru poszukiwań dla wątku ////////////
         } /////////////////////////////////////////////////////////////////////////////////////////
@@ -42,6 +45,7 @@ std::set<NTL::ZZ> SelectPrimeNumbers(const NTL::ZZ &B)
         }
 
     }
+
     return primes;
 }
 

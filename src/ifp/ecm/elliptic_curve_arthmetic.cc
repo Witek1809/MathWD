@@ -3,6 +3,7 @@
 
 namespace ecc
 {
+
 std::array<NTL::ZZ,3> AddPoint(const std::array<NTL::ZZ, 3> &point_1, const std::array<NTL::ZZ, 3> &point_2, const EllipticCurve &elliptic_curve)
 {
         /*
@@ -127,4 +128,5 @@ EllipticCurve RandomEllipticCurve(const NTL::ZZ &n)
 
     return elliptic_curve;
 }
+
 }

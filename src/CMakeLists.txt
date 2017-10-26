@@ -3,32 +3,34 @@ project(MathWD)
 
 set(CMAKE_BUILD_TYPE "Release")
 
-message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Build Type    : ${CMAKE_BUILD_TYPE}")
+message(STATUS "CMAKE Version : ${CMAKE_VERSION}")
 
 ## Ustawienia kompilatora ##########################################################################################
 include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
 if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11") # -O3 -o -Wl,-whole-archive
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 elseif(COMPILER_SUPPORTS_CXX0X)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 else()
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
 endif()
 ####################################################################################################################
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-whole-archive ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+
 #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -O3 -Wl,-whole-archive")
 
 ## Sprawdzenie wsparcia dla OpenMP ###############################
 find_package(OpenMP)
 if(OPENMP_FOUND)
-    message(STATUS "OpenMP found")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    #message(STATUS "OpenMP flags : ${OpenMP_C_FLAGS} ${OpenMP_CXX_FLAGS}")
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 else()
-    message(FATAL_ERROR "Could not find GMP OpenMP")
+    message(FATAL_ERROR "Could not find OpenMP flags")
 endif()
 ##################################################################
 
@@ -100,32 +102,39 @@ endif()
 ################################################
 
 ## Sprawdzenie dostępności biblioteki ECM ####
-find_library(ECM_LIB ecm)
-if(ECM_LIB)
-    message(STATUS "ECM found: ${ECM_LIB}")
-else()
-    message(FATAL_ERROR "Could not find ECM")
-endif()
+#find_library(ECM_LIB ecm)
+#if(ECM_LIB)
+#    message(STATUS "ECM found: ${ECM_LIB}")
+#else()
+#    message(FATAL_ERROR "Could not find ECM")
+#endif()
 ##############################################
 
 
 
 ## Ustawienie plików nagłówkowych ############
 set(HEADERS_FILE
+
     tools/print.h
     tools/sparse_vector_gf2.h
     tools/sparse_matrix_gf2.h
+
+    ifp/factorial.h
     ifp/canonical_distribution.h
     ifp/primes/select_primes.h
     ifp/ecm/ecm.h
     ifp/ecm/elliptic_curve.h
     ifp/ecm/elliptic_curve_arthmetic.h
+    ifp/sieves/sieve.h
+
     )
 ## Ustawienie plików źródłowych ##############
 set(SOURCES_FILE
+
     tools/print.cc
     tools/sparse_vector_gf2.cc
     tools/sparse_matrix_gf2.cc
+
     ifp/canonical_distribution.cc
     ifp/primes/select_primes.cc
     ifp/ecm/ecm.cc
@@ -145,7 +154,7 @@ include_directories(
 
 ## Zbudowanie biblioteki ###############################################
 add_library(${PROJECT_NAME} ${HEADERS_FILE} ${SOURCES_FILE})
-target_link_libraries(${PROJECT_NAME} ${NTL_LIB} ${ECM_LIB} ${GMP_LIBRARY} pthread)
+target_link_libraries(${PROJECT_NAME} ${NTL_LIB} ${GMP_LIBRARY} pthread)
 ########################################################################
 
 enable_testing()
@@ -153,13 +162,13 @@ enable_testing()
 ## Zbudowanie programów testowych ############################################################################################
 add_executable(MainProgram main.cc)
 target_link_libraries(MainProgram
-                      ${PROJECT_NAME} ${CPPUTESTEXT_LIBRARY} ${CPPUTEST_LIBRARY} ${NTL_LIB} ${ECM_LIB} ${GMP_LIBRARY} pthread)
+                      ${PROJECT_NAME} ${CPPUTESTEXT_LIBRARY} ${CPPUTEST_LIBRARY} ${NTL_LIB} ${GMP_LIBRARY} pthread)
 
 add_executable(Algebra tests/algebra.cc)
 target_link_libraries(Algebra
-                      ${PROJECT_NAME} ${CPPUTESTEXT_LIBRARY} ${CPPUTEST_LIBRARY} ${NTL_LIB} ${ECM_LIB} ${GMP_LIBRARY} pthread)
+                      ${PROJECT_NAME} ${CPPUTESTEXT_LIBRARY} ${CPPUTEST_LIBRARY} ${NTL_LIB} ${GMP_LIBRARY} pthread)
 
 add_executable(Factorial tests/factorial.cc)
 target_link_libraries(Factorial
-                      ${PROJECT_NAME} ${CPPUTESTEXT_LIBRARY} ${CPPUTEST_LIBRARY} ${NTL_LIB} ${ECM_LIB} ${GMP_LIBRARY} pthread)
+                      ${PROJECT_NAME} ${CPPUTESTEXT_LIBRARY} ${CPPUTEST_LIBRARY} ${NTL_LIB} ${GMP_LIBRARY} pthread)
 ###############################################################################################################################

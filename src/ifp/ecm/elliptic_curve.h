@@ -2,15 +2,27 @@
 
 #include <NTL/ZZ.h>
 
+namespace ecc
+{
+
+
 class EllipticCurve
 {
+
 public:
 
-    EllipticCurve(){}
+    EllipticCurve(){
+
+    }
+
+    ~EllipticCurve(){
+
+    }
 
     NTL::ZZ a_;
     NTL::ZZ b_;
     NTL::ZZ n_;
+
     std::array<NTL::ZZ,3> start_point_;
 
     EllipticCurve(const std::array<NTL::ZZ,3> &start_point, const NTL::ZZ &a, const NTL::ZZ &b, const NTL::ZZ &n)
@@ -23,3 +35,5 @@ public:
         this->start_point_[2] = start_point[2];
     }
 };
+
+}

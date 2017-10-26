@@ -7,6 +7,11 @@
 #define ONE NTL::ZZ(1)
 #define TWO NTL::ZZ(2)
 
+namespace ifp
+{
+
+using namespace ecc;
+
 Ecm::Ecm(const int number_of_threads)
 {
     if(number_of_threads == (-1)){
@@ -71,7 +76,7 @@ NTL::ZZ Ecm::SelectK(const std::set<NTL::ZZ> &prime_list)
     return k;
 }
 
-std::array<NTL::ZZ, 4> Ecm::EcmMainBody(const NTL::ZZ &n, const std::list<NTL::ZZ> &k_list, const std::array<NTL::ZZ, 3> &point_q, const EllipticCurve &elliptic_curve)
+std::array<NTL::ZZ, 4> Ecm::EcmMainBody(const NTL::ZZ &n, const std::list<NTL::ZZ> &k_list, const std::array<NTL::ZZ, 3> &point_q, const ecc::EllipticCurve &elliptic_curve)
 {
     NTL::ZZ GCD = ONE;
     NTL::ZZ D = ONE;
@@ -142,4 +147,6 @@ NTL::ZZ Ecm::Factorize(const NTL::ZZ &n)
     this->k_list_.clear();
 
     return Factor;
+}
+
 }

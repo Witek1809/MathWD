@@ -1,16 +1,24 @@
 #pragma once
 
+#ifndef ECM_H
+#define ECM_H
+
 #include <set>
 #include <list>
+#include "ifp/factorial.h"
 #include "elliptic_curve.h"
 #include "elliptic_curve_arthmetic.h"
 
-class Ecm
+namespace ifp
+{
+
+class Ecm : public FactorizeAlgorithm
 {
 
 public:
 
     Ecm(const int number_of_threads = (-1));
+
     NTL::ZZ Factorize(const NTL::ZZ &n);
 
 private:
@@ -28,6 +36,10 @@ private:
 
     std::array<NTL::ZZ, 4> EcmMainBody(const NTL::ZZ &n,
                                        const std::list<NTL::ZZ> &k_list,
-                                       const std::array<NTL::ZZ, 3> &point_q, const EllipticCurve &elliptic_curve);
+                                       const std::array<NTL::ZZ, 3> &point_q, const ecc::EllipticCurve &elliptic_curve);
 
 };
+
+}
+
+#endif // ECM_H

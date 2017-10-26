@@ -79,3 +79,24 @@ SparseMatrixGF2 Transpose(SparseMatrixGF2 &M){
     }
     return MT;
 }
+
+void SparseMatrixGF2::print(){
+
+    NTL::ZZ i, j;
+
+    for( i=NTL::conv<NTL::ZZ>(0); i<this->rows_; i++){
+
+        auto row  = this->rep_sparse_matrix_.find(i);
+        if( row != rep_sparse_matrix_.end() ){
+                (row->second).print();
+                std::cout<<"\n";
+        }
+        else{
+
+            for( j=NTL::conv<NTL::ZZ>(0); j<this->columns_; j++){
+                std::cout<<"0";
+            }
+            std::cout<<"\n";
+        }
+    }
+}

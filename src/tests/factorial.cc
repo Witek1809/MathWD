@@ -15,7 +15,7 @@ TEST_GROUP(IntegerFactorizationProblem)
 
 TEST(IntegerFactorizationProblem, EcmFactorial)
 {
-    Ecm ecm;
+    ifp::Ecm ecm;
 
     NTL::ZZ x,n,p,q;
 
